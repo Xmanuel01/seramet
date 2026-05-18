@@ -1,79 +1,111 @@
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Loader2, Send, CheckCircle2, AlertCircle, Mail, MapPin } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 
 const schema = z.object({
-  name: z.string().trim().min(1, "Please enter your name").max(100),
-  email: z.string().trim().email("Please enter a valid email").max(255),
-  message: z.string().trim().min(10, "Message must be at least 10 characters").max(2000),
+  name: z.string().trim().min(1, "Please enter your name").max(100, "Name is too long"),
+  email: z.string().trim().email("Please enter a valid email").max(255, "Email is too long"),
+  message: z
+    .string()
+    .trim()
+    .min(10, "Message must be at least 10 characters")
+    .max(2000, "Message is too long"),
 });
 
+type FormState = z.infer<typeof schema>;
+type FieldName = keyof FormState;
+type FieldErrors = Partial<Record<FieldName, string>>;
 type Status = "idle" | "submitting" | "success" | "error";
 
 const THROTTLE_KEY = "seramet_contact_last_submit";
-const THROTTLE_MS = 60_000; // 1 minute between submissions
-const MIN_FILL_MS = 2_000; // bots typically submit instantly
+const THROTTLE_MS = 60_000;
+const MIN_FILL_MS = 2_000;
+
+function validateAll(values: FormState): FieldErrors {
+  const result = schema.safeParse(values);
+  if (result.success) return {};
+  const errs: FieldErrors = {};
+  for (const issue of result.error.issues) {
+    const key = issue.path[0] as FieldName | undefined;
+    if (key && !errs[key]) errs[key] = issue.message;
+  }
+  return errs;
+}
 
 export function Contact() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState<FormState>({ name: "", email: "", message: "" });
+  const [touched, setTouched] = useState<Record<FieldName, boolean>>({
+    name: false,
+    email: false,
+    message: false,
+  });
   const [status, setStatus] = useState<Status>("idle");
-  const [error, setError] = useState<string | null>(null);
-  // Honeypot — real users leave this empty; bots tend to fill every field.
-  const [website, setWebsite] = useState("");
-  // Track when the form was mounted to detect instant bot submissions.
+  const [formError, setFormError] = useState<string | null>(null);
+  const [website, setWebsite] = useState(""); // honeypot
   const mountedAt = useRef(Date.now());
+
+  const errors = useMemo(() => validateAll(form), [form]);
+  const isValid = Object.keys(errors).length === 0;
+  const canSubmit = isValid && status !== "submitting";
+
+  function update<K extends FieldName>(key: K, value: FormState[K]) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+    if (status === "error") setFormError(null);
+    if (status === "success") setStatus("idle");
+  }
+
+  function markTouched(key: FieldName) {
+    setTouched((prev) => (prev[key] ? prev : { ...prev, [key]: true }));
+  }
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setError(null);
+    setFormError(null);
+    setTouched({ name: true, email: true, message: true });
 
-    // 1. Honeypot — silently "succeed" so bots don't learn anything.
+    if (!isValid) {
+      setStatus("error");
+      return;
+    }
+
+    // Honeypot — silently "succeed"
     if (website.trim() !== "") {
       setStatus("success");
       setForm({ name: "", email: "", message: "" });
       return;
     }
 
-    // 2. Minimum fill time — anything under 2s is almost certainly a bot.
+    // Instant-submit guard
     if (Date.now() - mountedAt.current < MIN_FILL_MS) {
       setStatus("success");
       setForm({ name: "", email: "", message: "" });
       return;
     }
 
-    // 3. Client-side throttle — one submission per minute per browser.
+    // Per-browser throttle
     const last = Number(localStorage.getItem(THROTTLE_KEY) ?? 0);
     const wait = THROTTLE_MS - (Date.now() - last);
     if (wait > 0) {
       setStatus("error");
-      setError(`Please wait ${Math.ceil(wait / 1000)}s before sending another message.`);
-      return;
-    }
-
-    const parsed = schema.safeParse(form);
-    if (!parsed.success) {
-      setStatus("error");
-      setError(parsed.error.issues[0]?.message ?? "Invalid input");
+      setFormError(`Please wait ${Math.ceil(wait / 1000)}s before sending another message.`);
       return;
     }
 
     setStatus("submitting");
-    const { error: dbError } = await supabase
-      .from("contact_messages")
-      .insert(parsed.data);
+    const { error: dbError } = await supabase.from("contact_messages").insert(form);
 
     if (dbError) {
       setStatus("error");
-      setError("Something went wrong. Please try again.");
+      setFormError("Something went wrong. Please try again.");
       return;
     }
 
     localStorage.setItem(THROTTLE_KEY, String(Date.now()));
     setStatus("success");
     setForm({ name: "", email: "", message: "" });
+    setTouched({ name: false, email: false, message: false });
   }
-
 
   return (
     <section id="contact-form" className="relative py-24 lg:py-32">
@@ -117,13 +149,20 @@ export function Contact() {
           {/* Right — form */}
           <form
             onSubmit={onSubmit}
+            noValidate
             className="glass relative rounded-2xl border border-border p-6 sm:p-8"
           >
             <div className="space-y-5">
-              {/* Honeypot: hidden from real users, irresistible to bots */}
+              {/* Honeypot — hidden from real users */}
               <div
                 aria-hidden="true"
-                style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}
+                style={{
+                  position: "absolute",
+                  left: "-10000px",
+                  width: 1,
+                  height: 1,
+                  overflow: "hidden",
+                }}
               >
                 <label htmlFor="website">Website</label>
                 <input
@@ -141,50 +180,50 @@ export function Contact() {
                 label="Name"
                 id="name"
                 value={form.name}
-                onChange={(v) => setForm({ ...form, name: v })}
+                onChange={(v) => update("name", v)}
+                onBlur={() => markTouched("name")}
                 placeholder="Ada Okonkwo"
                 disabled={status === "submitting"}
+                error={touched.name ? errors.name : undefined}
               />
               <Field
                 label="Email"
                 id="email"
                 type="email"
                 value={form.email}
-                onChange={(v) => setForm({ ...form, email: v })}
+                onChange={(v) => update("email", v)}
+                onBlur={() => markTouched("email")}
                 placeholder="ada@company.com"
                 disabled={status === "submitting"}
+                error={touched.email ? errors.email : undefined}
               />
-              <div>
-                <label htmlFor="message" className="mb-2 block text-xs uppercase tracking-[0.18em] text-muted-foreground">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  rows={5}
-                  value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  disabled={status === "submitting"}
-                  maxLength={2000}
-                  placeholder="Tell us what you're building…"
-                  className="w-full resize-none rounded-xl border border-border bg-background/40 px-4 py-3 text-sm text-ivory placeholder:text-muted-foreground/60 outline-none transition-colors focus:border-gold/60"
-                />
-              </div>
+              <TextareaField
+                label="Message"
+                id="message"
+                value={form.message}
+                onChange={(v) => update("message", v)}
+                onBlur={() => markTouched("message")}
+                placeholder="Tell us what you're building…"
+                disabled={status === "submitting"}
+                error={touched.message ? errors.message : undefined}
+                maxLength={2000}
+              />
 
               {status === "success" && (
                 <StatusBox icon={<CheckCircle2 className="h-4 w-4" />} tone="success">
                   Message sent. We'll be in touch soon.
                 </StatusBox>
               )}
-              {status === "error" && error && (
+              {status === "error" && formError && (
                 <StatusBox icon={<AlertCircle className="h-4 w-4" />} tone="error">
-                  {error}
+                  {formError}
                 </StatusBox>
               )}
 
               <button
                 type="submit"
-                disabled={status === "submitting"}
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-sunrise px-6 py-3.5 text-sm font-medium text-primary-foreground glow transition-transform hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-70"
+                disabled={!canSubmit}
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-sunrise px-6 py-3.5 text-sm font-medium text-primary-foreground glow transition-all hover:scale-[1.01] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
               >
                 {status === "submitting" ? (
                   <>
@@ -206,15 +245,28 @@ export function Contact() {
   );
 }
 
+type BaseFieldProps = {
+  label: string;
+  id: string;
+  value: string;
+  onChange: (v: string) => void;
+  onBlur?: () => void;
+  placeholder?: string;
+  disabled?: boolean;
+  error?: string;
+};
+
 function Field({
-  label, id, value, onChange, placeholder, type = "text", disabled,
-}: {
-  label: string; id: string; value: string; onChange: (v: string) => void;
-  placeholder?: string; type?: string; disabled?: boolean;
-}) {
+  label, id, value, onChange, onBlur, placeholder, type = "text", disabled, error,
+}: BaseFieldProps & { type?: string }) {
+  const hasError = Boolean(error);
+  const describedBy = hasError ? `${id}-error` : undefined;
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-xs uppercase tracking-[0.18em] text-muted-foreground">
+      <label
+        htmlFor={id}
+        className="mb-2 block text-xs uppercase tracking-[0.18em] text-muted-foreground"
+      >
         {label}
       </label>
       <input
@@ -222,11 +274,64 @@ function Field({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onBlur={onBlur}
         placeholder={placeholder}
         disabled={disabled}
-        className="w-full rounded-xl border border-border bg-background/40 px-4 py-3 text-sm text-ivory placeholder:text-muted-foreground/60 outline-none transition-colors focus:border-gold/60"
+        aria-invalid={hasError || undefined}
+        aria-describedby={describedBy}
+        className={`w-full rounded-xl border bg-background/40 px-4 py-3 text-sm text-ivory placeholder:text-muted-foreground/60 outline-none transition-colors ${
+          hasError
+            ? "border-destructive/70 focus:border-destructive"
+            : "border-border focus:border-gold/60"
+        }`}
       />
+      <FieldError id={describedBy} message={error} />
     </div>
+  );
+}
+
+function TextareaField({
+  label, id, value, onChange, onBlur, placeholder, disabled, error, maxLength,
+}: BaseFieldProps & { maxLength?: number }) {
+  const hasError = Boolean(error);
+  const describedBy = hasError ? `${id}-error` : undefined;
+  return (
+    <div>
+      <label
+        htmlFor={id}
+        className="mb-2 block text-xs uppercase tracking-[0.18em] text-muted-foreground"
+      >
+        {label}
+      </label>
+      <textarea
+        id={id}
+        rows={5}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onBlur={onBlur}
+        disabled={disabled}
+        maxLength={maxLength}
+        placeholder={placeholder}
+        aria-invalid={hasError || undefined}
+        aria-describedby={describedBy}
+        className={`w-full resize-none rounded-xl border bg-background/40 px-4 py-3 text-sm text-ivory placeholder:text-muted-foreground/60 outline-none transition-colors ${
+          hasError
+            ? "border-destructive/70 focus:border-destructive"
+            : "border-border focus:border-gold/60"
+        }`}
+      />
+      <FieldError id={describedBy} message={error} />
+    </div>
+  );
+}
+
+function FieldError({ id, message }: { id?: string; message?: string }) {
+  if (!message) return null;
+  return (
+    <p id={id} className="mt-1.5 flex items-center gap-1.5 text-xs text-destructive">
+      <AlertCircle className="h-3 w-3" />
+      {message}
+    </p>
   );
 }
 
