@@ -2,10 +2,10 @@ import { Github, Twitter, Linkedin } from "lucide-react";
 import { Logo } from "./Logo";
 
 const groups = [
-  { title: "Products", links: ["Enkai", "Nommo", "Nuru IDE"] },
+  { title: "Products", links: ["Enkai", "Nommo", "Seramet IDE"] },
   { title: "Company", links: ["About", "Research", "Blog", "Careers"] },
   { title: "Developers", links: ["Docs", "GitHub", "Community"] },
-  { title: "Contact", links: ["hello@nuru.ai", "Press", "Support"] },
+  { title: "Contact", links: ["hello@seramet.ai", "Press", "Support"] },
 ];
 
 export function Footer() {
@@ -16,7 +16,7 @@ export function Footer() {
           <div>
             <Logo />
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground">
-              Nuru is building intelligent systems, developer tools, and programming
+              Seramet is building intelligent systems, developer tools, and programming
               infrastructure for a new era — born from light, built for the world.
             </p>
             <div className="mt-6 flex items-center gap-3">
@@ -48,7 +48,7 @@ export function Footer() {
         <div className="hairline mt-16" />
 
         <div className="mt-6 flex flex-col items-start justify-between gap-3 text-xs text-muted-foreground sm:flex-row sm:items-center">
-          <div>© 2026 Nuru. All rights reserved.</div>
+          <div>© 2026 Seramet. All rights reserved.</div>
           <div className="flex gap-6">
             <a href="#" className="hover:text-ivory">Privacy</a>
             <a href="#" className="hover:text-ivory">Terms</a>

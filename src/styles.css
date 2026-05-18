@@ -46,7 +46,7 @@
 :root {
   --radius: 0.875rem;
 
-  /* Nuru palette — dawn over deep night */
+  /* Seramet palette — dawn over deep night */
   --background: oklch(0.14 0.012 50);          /* deep black, warm */
   --foreground: oklch(0.96 0.012 80);          /* ivory */
 

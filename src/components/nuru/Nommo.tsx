@@ -12,7 +12,7 @@ export function Nommo() {
             Nommo: intelligence with <span className="text-gradient">voice, memory, and purpose</span>.
           </h2>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            Nommo is the AI layer of Nuru — designed to support reasoning, automation,
+            Nommo is the AI layer of Seramet — designed to support reasoning, automation,
             research, coding, and intelligent digital work.
           </p>
         </div>

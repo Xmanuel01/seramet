@@ -16,14 +16,14 @@ export function Hero() {
           </div>
 
           <h1 className="font-display text-5xl font-semibold leading-[1.05] tracking-tight text-ivory sm:text-6xl lg:text-7xl">
-            Nuru builds{" "}
+            Seramet builds{" "}
             <span className="text-gradient">intelligence</span>
             <br className="hidden sm:block" /> for a new era.
           </h1>
 
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-muted-foreground">
             From <span className="text-ivory">Enkai</span>, our next-generation programming language,
-            to <span className="text-ivory">Nommo AI</span> and the <span className="text-ivory">Nuru IDE</span>,
+            to <span className="text-ivory">Nommo AI</span> and the <span className="text-ivory">Seramet IDE</span>,
             we are creating tools for developers, businesses, and future AI systems.
           </p>
 
@@ -51,12 +51,12 @@ export function Hero() {
         <div className="relative">
           <div className="absolute -inset-6 rounded-[2rem] bg-sunrise opacity-20 blur-3xl" />
           <div className="relative aspect-square overflow-hidden rounded-[2rem] border border-[oklch(0.86_0.15_82_/_0.25)] glow">
-            <img src={heroImg} alt="Nuru neural sunrise core"
+            <img src={heroImg} alt="Seramet neural sunrise core"
               width={1536} height={1536}
               className="h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
             <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl border border-border bg-background/60 px-4 py-3 backdrop-blur-xl">
-              <div className="text-xs text-muted-foreground">core.nuru / dawn-engine</div>
+              <div className="text-xs text-muted-foreground">core.seramet / dawn-engine</div>
               <div className="flex items-center gap-1.5 text-xs text-gold">
                 <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
                 online

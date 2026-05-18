@@ -15,7 +15,7 @@ export function Origin() {
               Born from light.<br /><span className="text-gradient">Built for the world.</span>
             </h2>
             <p className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-              Nuru represents a new dawn for African-led technology — building tools that
+              Seramet represents a new dawn for African-led technology — building tools that
               can compete globally while carrying a distinct identity of intelligence,
               resilience, and creation.
             </p>

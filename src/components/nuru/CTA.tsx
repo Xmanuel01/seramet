@@ -6,7 +6,7 @@ export function CTA() {
       <div className="mx-auto max-w-5xl px-6 text-center lg:px-10">
         <h2 className="font-display text-4xl font-semibold tracking-tight text-ivory sm:text-5xl lg:text-6xl">
           Start with <span className="text-gradient">Enkai</span>.<br />
-          Build the future with Nuru.
+          Build the future with Seramet.
         </h2>
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <a href="#enkai"

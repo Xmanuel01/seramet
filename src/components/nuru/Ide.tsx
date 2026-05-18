@@ -6,7 +6,7 @@ export function Ide() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="mb-12 max-w-3xl">
           <div className="mb-4 inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-gold">
-            Nuru IDE <span className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted-foreground">In Development</span>
+            Seramet IDE <span className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted-foreground">In Development</span>
           </div>
           <h2 className="font-display text-4xl font-semibold tracking-tight text-ivory sm:text-5xl">
             The workspace for the <span className="text-gradient">Enkai era</span>.
@@ -27,7 +27,7 @@ export function Ide() {
                 <span className="h-2.5 w-2.5 rounded-full bg-[oklch(0.78_0.16_75)]" />
                 <span className="h-2.5 w-2.5 rounded-full bg-[oklch(0.7_0.14_150)]" />
               </div>
-              <div className="font-mono text-xs text-muted-foreground">nuru-ide · enkai-starter</div>
+              <div className="font-mono text-xs text-muted-foreground">seramet-ide · enkai-starter</div>
               <div className="text-[10px] uppercase tracking-wider text-gold">v0.0.1</div>
             </div>
 
@@ -56,7 +56,7 @@ export function Ide() {
                 <pre className="p-5 font-mono text-xs leading-relaxed">
                   <code>
                     <span className="text-muted-foreground"> 1  // dawn engine</span>{"\n"}
-                    <span className="text-muted-foreground"> 2  </span><span className="text-[oklch(0.78_0.16_55)]">import</span> <span className="text-ivory">ai</span> <span className="text-muted-foreground">from</span> <span className="text-[oklch(0.82_0.14_140)]">"nuru/nommo"</span>{"\n"}
+                    <span className="text-muted-foreground"> 2  </span><span className="text-[oklch(0.78_0.16_55)]">import</span> <span className="text-ivory">ai</span> <span className="text-muted-foreground">from</span> <span className="text-[oklch(0.82_0.14_140)]">"seramet/nommo"</span>{"\n"}
                     <span className="text-muted-foreground"> 3</span>{"\n"}
                     <span className="text-muted-foreground"> 4  </span><span className="text-[oklch(0.78_0.16_55)]">start</span> <span className="text-[oklch(0.86_0.15_82)]">main</span> <span className="text-muted-foreground">::</span>{"\n"}
                     <span className="text-muted-foreground"> 5      </span><span className="text-[oklch(0.78_0.16_55)]">let</span> <span className="text-ivory">prompt</span> <span className="text-muted-foreground">:=</span> <span className="text-[oklch(0.82_0.14_140)]">"Greet the world"</span>{"\n"}
