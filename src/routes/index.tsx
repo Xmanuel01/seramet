@@ -9,6 +9,7 @@ import { Ide } from "@/components/nuru/Ide";
 import { Research } from "@/components/nuru/Research";
 import { Origin } from "@/components/nuru/Origin";
 import { CTA } from "@/components/nuru/CTA";
+import { Contact } from "@/components/nuru/Contact";
 import { Footer } from "@/components/nuru/Footer";
 
 export const Route = createFileRoute("/")({
