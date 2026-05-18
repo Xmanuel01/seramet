@@ -56,7 +56,7 @@ export function Hero() {
               className="h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent" />
             <div className="absolute bottom-5 left-5 right-5 flex items-center justify-between rounded-2xl border border-border bg-background/60 px-4 py-3 backdrop-blur-xl">
-              <div className="text-xs text-muted-foreground">core.nuru / dawn-engine</div>
+              <div className="text-xs text-muted-foreground">core.seramet / dawn-engine</div>
               <div className="flex items-center gap-1.5 text-xs text-gold">
                 <span className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
                 online
