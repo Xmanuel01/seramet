@@ -45,6 +45,8 @@ function Index() {
         <Research />
         <Origin />
         <CTA />
+        <Contact />
+
       </main>
       <Footer />
     </div>
