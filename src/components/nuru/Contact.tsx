@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Loader2, Send, CheckCircle2, AlertCircle, Mail, MapPin } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,14 +11,45 @@ const schema = z.object({
 
 type Status = "idle" | "submitting" | "success" | "error";
 
+const THROTTLE_KEY = "seramet_contact_last_submit";
+const THROTTLE_MS = 60_000; // 1 minute between submissions
+const MIN_FILL_MS = 2_000; // bots typically submit instantly
+
 export function Contact() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
+  // Honeypot — real users leave this empty; bots tend to fill every field.
+  const [website, setWebsite] = useState("");
+  // Track when the form was mounted to detect instant bot submissions.
+  const mountedAt = useRef(Date.now());
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    // 1. Honeypot — silently "succeed" so bots don't learn anything.
+    if (website.trim() !== "") {
+      setStatus("success");
+      setForm({ name: "", email: "", message: "" });
+      return;
+    }
+
+    // 2. Minimum fill time — anything under 2s is almost certainly a bot.
+    if (Date.now() - mountedAt.current < MIN_FILL_MS) {
+      setStatus("success");
+      setForm({ name: "", email: "", message: "" });
+      return;
+    }
+
+    // 3. Client-side throttle — one submission per minute per browser.
+    const last = Number(localStorage.getItem(THROTTLE_KEY) ?? 0);
+    const wait = THROTTLE_MS - (Date.now() - last);
+    if (wait > 0) {
+      setStatus("error");
+      setError(`Please wait ${Math.ceil(wait / 1000)}s before sending another message.`);
+      return;
+    }
 
     const parsed = schema.safeParse(form);
     if (!parsed.success) {
@@ -38,9 +69,11 @@ export function Contact() {
       return;
     }
 
+    localStorage.setItem(THROTTLE_KEY, String(Date.now()));
     setStatus("success");
     setForm({ name: "", email: "", message: "" });
   }
+
 
   return (
     <section id="contact-form" className="relative py-24 lg:py-32">
@@ -87,6 +120,23 @@ export function Contact() {
             className="glass relative rounded-2xl border border-border p-6 sm:p-8"
           >
             <div className="space-y-5">
+              {/* Honeypot: hidden from real users, irresistible to bots */}
+              <div
+                aria-hidden="true"
+                style={{ position: "absolute", left: "-10000px", width: 1, height: 1, overflow: "hidden" }}
+              >
+                <label htmlFor="website">Website</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                />
+              </div>
+
               <Field
                 label="Name"
                 id="name"
