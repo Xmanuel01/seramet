@@ -12,7 +12,7 @@ export function Why() {
     <section className="py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="mb-16 max-w-3xl">
-          <div className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">Why Nuru</div>
+          <div className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">Why Seramet</div>
           <h2 className="font-display text-4xl font-semibold tracking-tight text-ivory sm:text-5xl">
             Built for builders, thinkers,<br />
             and the next generation of <span className="text-gradient">intelligence</span>.

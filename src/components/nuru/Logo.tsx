@@ -8,7 +8,7 @@ export function Logo({ className = "" }: { className?: string }) {
         <div className="absolute inset-[10px] rounded-full bg-sunrise" />
       </div>
       <span className="font-display text-xl font-semibold tracking-tight text-ivory">
-        Nuru
+        Seramet
       </span>
     </div>
   );

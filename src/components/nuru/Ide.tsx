@@ -6,7 +6,7 @@ export function Ide() {
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="mb-12 max-w-3xl">
           <div className="mb-4 inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-gold">
-            Nuru IDE <span className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted-foreground">In Development</span>
+            Seramet IDE <span className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted-foreground">In Development</span>
           </div>
           <h2 className="font-display text-4xl font-semibold tracking-tight text-ivory sm:text-5xl">
             The workspace for the <span className="text-gradient">Enkai era</span>.

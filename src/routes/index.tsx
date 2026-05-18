@@ -14,16 +14,16 @@ import { Footer } from "@/components/nuru/Footer";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Nuru — Intelligence for a new era" },
+      { title: "Seramet — Intelligence for a new era" },
       {
         name: "description",
         content:
-          "Nuru builds AI systems, developer tools, and programming infrastructure: Enkai (language), Nommo (AI), and Nuru IDE.",
+          "Seramet builds AI systems, developer tools, and programming infrastructure: Enkai (language), Nommo (AI), and Seramet IDE.",
       },
-      { property: "og:title", content: "Nuru — Intelligence for a new era" },
+      { property: "og:title", content: "Seramet — Intelligence for a new era" },
       {
         property: "og:description",
-        content: "Enkai language, Nommo AI, and Nuru IDE — tools for the next generation of intelligent software.",
+        content: "Enkai language, Nommo AI, and Seramet IDE — tools for the next generation of intelligent software.",
       },
     ],
   }),

@@ -10,7 +10,7 @@ export function Enkai() {
             Enkai is the <span className="text-gradient">first step</span>.
           </h2>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            Enkai is Nuru's programming language built for modern developers,
+            Enkai is Seramet's programming language built for modern developers,
             AI workflows, performance experiments, and future intelligent systems.
           </p>
 

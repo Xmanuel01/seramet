@@ -30,7 +30,7 @@ export function Header() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-10">
-        <a href="#top" aria-label="Nuru home"><Logo /></a>
+        <a href="#top" aria-label="Seramet home"><Logo /></a>
 
         <nav className="hidden items-center gap-8 lg:flex">
           {links.map((l) => (

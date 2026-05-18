@@ -12,7 +12,7 @@ const items = [
     cta: "Preview Nommo", href: "#nommo",
   },
   {
-    icon: MonitorCog, name: "Nuru IDE", status: "In Development", live: false,
+    icon: MonitorCog, name: "Seramet IDE", status: "In Development", live: false,
     desc: "A modern development environment built for Enkai, AI-assisted coding, secure workflows, and future software engineering.",
     cta: "Explore IDE", href: "#ide",
   },
