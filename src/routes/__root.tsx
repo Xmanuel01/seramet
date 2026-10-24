@@ -72,16 +72,31 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Seramet - Intelligent systems and developer tools" },
+      {
+        name: "description",
+        content:
+          "Seramet builds intelligent systems and developer tools, including Enkai, Nommo AI and Seramet IDE.",
+      },
+      { name: "author", content: "Seramet" },
+      { name: "robots", content: "index, follow" },
+      { property: "og:title", content: "Seramet" },
+      {
+        property: "og:description",
+        content: "Intelligent systems, developer tools and programming infrastructure.",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Seramet" },
+      { property: "og:url", content: "https://seramet.co.ke/" },
+      { property: "og:image", content: "https://seramet.co.ke/brand/seramet-pwa-512.png" },
+      { property: "og:image:alt", content: "Seramet logo" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:image", content: "https://seramet.co.ke/brand/seramet-pwa-512.png" },
     ],
     links: [
+      { rel: "canonical", href: "https://seramet.co.ke/" },
+      { rel: "icon", type: "image/png", href: "/brand/seramet-icon-light.png" },
+      { rel: "apple-touch-icon", href: "/brand/apple-touch-icon.png" },
       {
         rel: "stylesheet",
         href: appCss,

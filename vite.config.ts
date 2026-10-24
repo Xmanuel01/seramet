@@ -16,7 +16,7 @@ const isVercel = process.env.VERCEL === "1";
 
 const tanstackStartOptions = {
   importProtection: {
-    behavior: "error",
+    behavior: "error" as const,
     client: {
       files: ["**/server/**"],
       specifiers: ["server-only"],
@@ -39,7 +39,13 @@ const vercelConfig = defineViteConfig({
       "@tanstack/query-core",
     ],
   },
-  plugins: [tailwindcss(), tsConfigPaths({ projects: ["./tsconfig.json"] }), tanstackStart(tanstackStartOptions), nitro(), viteReact()],
+  plugins: [
+    tailwindcss(),
+    tsConfigPaths({ projects: ["./tsconfig.json"] }),
+    tanstackStart(tanstackStartOptions),
+    nitro(),
+    viteReact(),
+  ],
 });
 
 // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
