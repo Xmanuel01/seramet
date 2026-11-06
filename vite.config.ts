@@ -16,7 +16,7 @@ const isVercel = process.env.VERCEL === "1";
 
 const tanstackStartOptions = {
   importProtection: {
-    behavior: "error",
+    behavior: "error" as const,
     client: {
       files: ["**/server/**"],
       specifiers: ["server-only"],

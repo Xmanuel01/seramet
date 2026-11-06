@@ -50,7 +50,7 @@ export function Footer() {
         <div className="mt-6 flex flex-col items-start justify-between gap-3 text-xs text-muted-foreground sm:flex-row sm:items-center">
           <div>© 2026 Seramet. All rights reserved.</div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-ivory">Privacy</a>
+            <a href="/privacy" className="hover:text-ivory">Privacy</a>
             <a href="#" className="hover:text-ivory">Terms</a>
             <a href="#" className="hover:text-ivory">Security</a>
           </div>
